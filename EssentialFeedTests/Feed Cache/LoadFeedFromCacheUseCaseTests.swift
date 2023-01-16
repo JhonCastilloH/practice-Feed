@@ -42,7 +42,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_deliversCachedImageOnLessThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimeStamp = fixedCurrentDate.adding(days: 7).adding(seconds: 1)
+        let lessThanSevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
     
         expect(sut, toCompleteWith: .success(feed.models)) {
@@ -53,7 +53,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_deliversNoImagesOnSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimeStamp = fixedCurrentDate.adding(days: -7)
+        let sevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
     
         expect(sut, toCompleteWith: .success([])) {
@@ -64,7 +64,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_deliversNoImagesOnMoreThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimeStamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let sevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
     
         expect(sut, toCompleteWith: .success([])) {
@@ -93,7 +93,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_hasNoSideEffectsOnLessThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimeStamp = fixedCurrentDate.adding(days: 7).adding(seconds: 1)
+        let lessThanSevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
@@ -105,7 +105,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_hasNoSideEffectsOnSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimeStamp = fixedCurrentDate.adding(days: -7)
+        let sevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
@@ -117,7 +117,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_hasNoSideEffectsOnMoreThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let moreThanSevenDaysOldTimeStamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let moreThanSevenDaysOldTimeStamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
