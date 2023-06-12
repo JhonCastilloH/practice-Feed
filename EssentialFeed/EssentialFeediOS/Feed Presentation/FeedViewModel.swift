@@ -3,7 +3,6 @@
 //  EssentialFeediOS
 //
 
-import Foundation
 import EssentialFeed
 
 final class FeedViewModel {
