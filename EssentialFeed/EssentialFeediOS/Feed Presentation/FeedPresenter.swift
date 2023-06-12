@@ -5,7 +5,7 @@
 
 import EssentialFeed
 
-protocol FeedLoadingView: class {
+protocol FeedLoadingView {
     func display(isLoading: Bool)
 }
 
@@ -23,7 +23,7 @@ final class FeedPresenter {
     }
     
     var feedView: FeedView?
-    weak var feedLoadingView: FeedLoadingView?
+    var feedLoadingView: FeedLoadingView?
     
     func loadFeed() {
         feedLoadingView?.display(isLoading: true)
